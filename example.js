@@ -1,28 +1,28 @@
 #!/usr/bin/env node
+/*jslint nodejs:true */
 
 var qc = require("./quickcheck");
 
-function propertyEven(x) { return x % 2 == 0; }
+function propertyEven(x) { return x % 2 === 0; }
 
 function arbEven() {
 	var b = qc.arbByte();
 
-	if (b % 2 == 0) { return b; }
+	if (b % 2 === 0) { return b; }
 	else { return (b + 1) % 256; }
 }
 
 function validInteger(s) {
 	var i = parseInt(s, 10);
-	return typeof(i) == "number" && !isNaN(i);
+	return typeof(i) === "number" && !isNaN(i);
 }
 
 function arbDigits() {
-	var d = "";
+	var
+		d = "",
+		fn = function () { return String.fromCharCode(48 + Math.floor(Math.random() * 10)); };
 
-	while (d.length < 1) { d = qc.arbArray(function () {
-			return String.fromCharCode(48 + Math.floor(Math.random() * 10));
-		});
-	}
+	while (d.length < 1) { d = qc.arbArray(fn); }
 
 	return d;
 }

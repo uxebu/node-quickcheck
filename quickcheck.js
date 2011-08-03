@@ -1,3 +1,5 @@
+/*jslint nodejs:true */
+
 function arbBool() {
 	return Math.random() > 0.5 ? true : false;
 }
@@ -31,10 +33,12 @@ function arbChar() {
 exports.arbChar = arbChar;
 
 function arbArray(generator) {
-	var len = Math.floor(Math.random() * 100);
-	var array = [];
+	var
+		len = Math.floor(Math.random() * 100),
+		array = [],
+		i;
 
-	for (var i = 0; i < len; i++) {
+	for (i = 0; i < len; i++) {
 		array.push(generator());
 	}
 
@@ -50,14 +54,16 @@ function arbString() {
 exports.arbString = arbString;
 
 function forAll(property) {
-	var generators = Array.prototype.slice.call(arguments, 1);
+	var
+		generators = Array.prototype.slice.call(arguments, 1),
+		fn = function (f) { return f(); },
+		i,
+		values;
 
-	for (var i = 0; i < 100; i ++) {
-		var values = generators.map(function (f) { return f(); });
+	for (i = 0; i < 100; i ++) {
+		values = generators.map(fn);
 
-		var propertyHolds = property.apply(null, values);
-
-		if (!propertyHolds) {
+		if (!property.apply(null, values)) {
 			console.log("*** Failed! " + values);
 			return false;
 		}
@@ -72,7 +78,7 @@ exports.forAll = forAll;
 
 function forAllSilent() {
 	console.oldLog = console.log;
-	console.log = function () {}
+	console.log = function () {};
 
 	var result = forAll.apply(null, arguments);
 
@@ -85,13 +91,18 @@ exports.forAllSilent = forAllSilent;
 
 // Test quickcheck itself
 function test() {
-	var propertyEven = function (x) { return x % 2 == 0; };
+	var
+		propertyEven,
+		propertyNumber,
+		propertyTrue;
+
+	propertyEven = function (x) { return x % 2 === 0; };
 	console.assert(!forAllSilent(propertyEven, arbByte));
 
-	var propertyNumber = function (x) { return typeof(x) == "number"; }
+	propertyNumber = function (x) { return typeof(x) === "number"; };
 	console.assert(forAllSilent(propertyNumber, arbInt));
 
-	var propertyTrue = function (x) { return x; }
+	propertyTrue = function (x) { return x; };
 	console.assert(!forAllSilent(propertyTrue, arbBool));
 
 	return true;
