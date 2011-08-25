@@ -64,14 +64,12 @@ function forAll(property) {
 		values = generators.map(fn);
 
 		if (!property.apply(null, values)) {
-			console.log("*** Failed! " + values);
-			return false;
+			console.log("*** Failed!\n" + values);
+			return;
 		}
 	}
 
 	console.log("+++ OK, passed 100 tests.");
-
-	return true;
 }
 
 exports.forAll = forAll;
