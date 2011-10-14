@@ -1,6 +1,10 @@
 quickcheck - Node.js port of the QuickCheck unit test framework
 
-Example
+HOMEPAGE
+
+[http://www.yellosoft.us/quickcheck](http://www.yellosoft.us/quickcheck)
+
+EXAMPLE
 
 	var qc = require("quickcheck");
 
